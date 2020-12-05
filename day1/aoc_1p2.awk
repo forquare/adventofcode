@@ -8,33 +8,29 @@ function alen(a,    k){
 	return k
 }
 
-function doCheck(count, input,    sumlist, slindex, iteration, entry, i, sum){
+function doCheck(count,    sumlist, current, iteration, entry, i, sum){
 	iteration=alen(sumlist)
+	
+	if(current < 1){
+		current = 1
+	}
 
-	for(entry in input){
-		sumlist[iteration] = input[entry]
-		slindex[iteration] = entry
+	for(entry = current; entry <= NF; entry++){
+		sumlist[iteration] = $entry
 		if(alen(sumlist) == count){
-			#for(i in sumlist){ printf "%i\t",sumlist[i] }
-			#printf "\n"
-			#exit
 			sum=0
 			TOTAL=1
 			for(i in sumlist){
 				sum+=sumlist[i]
 				TOTAL*=sumlist[i]
 			}
-
-			#printf "CALC: %s%i  %s%i  %s%i\n","iteration=",iteration,"count=",count,"calc=",sum
 			if(sum == 2020){
-				printf "2020: %s%i  %s%i\n","iteration=",iteration,"count=",count
 				exit
 			}
 		} else {
-			doCheck(count, input, sumlist, slindex)
+			doCheck(count, sumlist, current)
 		}
 		delete sumlist[iteration]
-		delete slindex[iteration]
 	}
 	return
 }
@@ -46,8 +42,7 @@ BEGIN {
 }
 
 {
-	split($0, inarray, FS)
-	doCheck(3, inarray)
+	doCheck(3)
 }
 
 END {
